@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Translator</string>
+    <string-array name="language_array">
+        <item>Indonesia</item>
+        <item>English</item>
+        <item>Spain</item>
+        <item>German</item>
+        <item>Portuguese</item>
+        <item>Tagalog</item>
+    </string-array>
 </resources>

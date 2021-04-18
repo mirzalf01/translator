@@ -4,42 +4,99 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ResultActivity">
-    <RelativeLayout
-        android:id="@+id/about"
+    android:background="@color/bgColor"
+    android:fitsSystemWindows="true"
+    tools:context=".MenuActivity">
+
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        tools:ignore="RtlCompat"
+        android:text="Translated Text"
+        android:fontFamily="@font/lato_bold"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:background="@drawable/bg_gradient"/>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:padding="15dp">
-
-        <TextView
-            android:id="@+id/fName"
-            android:textColor="@color/white"
-            android:layout_width="match_parent"
+        android:layout_below="@id/appName"
+        android:id="@+id/langSetting"
+        android:layout_marginTop="-35dp">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:textSize="24dp"/>
+            android:orientation="vertical">
+                <TextView
+                    android:id="@+id/langSource"
+                    android:layout_width="175dp"
+                    android:layout_height="50dp"
+                    android:text="Lang: Indonesia"
+                    android:textColor="@color/black"
+                    android:textAlignment="center"
+                    android:fontFamily="@font/lato_regular"
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    android:layout_gravity="end"
+                    android:background="@drawable/bg_shadow"
+                    android:elevation="10dp"
+                    android:layout_margin="5dp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="175dp"
+                android:layout_height="50dp"
+                android:background="@drawable/bg_shadow"
+                android:elevation="5dp"
+                android:layout_margin="5dp">
+                <Spinner
+                    android:id="@+id/spinner1"
+                    android:spinnerMode="dropdown"
+                    android:layout_width="175dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="start"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+        </LinearLayout>
 
-    </RelativeLayout>
-
-    <RelativeLayout
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/about"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        android:padding="15dp">
-
-        <TextView
-            android:id="@+id/fket"
-            android:textColor="@color/white"
-            android:layout_width="match_parent"
+        android:id="@+id/langResult"
+        android:orientation="vertical"
+        android:layout_below="@id/langSetting"
+        android:layout_marginTop="10dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp" />
+            android:layout_margin="10dp"
+            android:layout_gravity="center"
+            android:orientation="vertical"
+            android:background="@drawable/bg_shadow"
+            android:elevation="5dp">
+            <TextView
+                android:id="@+id/textResult"
+                android:layout_width="360dp"
+                android:scrollbars="vertical"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingVertical="20dp"
+                android:fontFamily="@font/lato_regular"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:paddingHorizontal="15dp"/>
+        </LinearLayout>
+    </LinearLayout>
 
-    </RelativeLayout>
+
+
 </RelativeLayout>

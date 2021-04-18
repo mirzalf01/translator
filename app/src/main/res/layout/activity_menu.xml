@@ -44,7 +44,7 @@
                 android:paddingVertical="20dp"
                 android:fontFamily="@font/lato_regular"
                 android:textColor="@color/black"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 android:paddingHorizontal="15dp"/>
         </LinearLayout>
     </LinearLayout>
