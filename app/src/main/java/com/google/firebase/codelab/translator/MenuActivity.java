@@ -56,6 +56,11 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void launcTranslate(View view) {
+        Intent intent = new Intent(this, TranslateActivity.class);
+        startActivity(intent);
+    }
+
     public void exitApp(View view) {
         finish();
         System.exit(0);
