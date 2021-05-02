@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/bgColor"
     android:fitsSystemWindows="true"
-    tools:context=".MenuActivity">
+    tools:context=".TranslateActivity">
 
     <TextView
         android:id="@+id/appName"
@@ -37,6 +37,8 @@
             android:elevation="5dp">
             <EditText
                 android:id="@+id/textResource"
+                android:hint="Source text . . ."
+                android:textColorHint="@color/black"
                 android:background="@null"
                 android:layout_width="350dp"
                 android:layout_height="150dp"
@@ -79,20 +81,19 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/switchLang"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:text="Arrow"
-                android:textColor="@color/black"
-                android:textAlignment="center"
-                android:fontFamily="@font/lato_regular"
-                android:textSize="12sp"
-                android:gravity="center"
-                android:layout_gravity="center"
                 android:background="@drawable/bg_shadow"
-                android:elevation="10dp"
-                android:layout_margin="5dp"/>
+                android:elevation="5dp"
+                android:layout_margin="5dp"
+                android:onClick="changePosition">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/transfer"/>
+            </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="0dp"

@@ -1,5 +1,6 @@
 package com.google.firebase.codelab.translator;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.PorterDuff;
@@ -7,12 +8,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.mlkit.common.model.DownloadConditions;
+import com.google.mlkit.nl.translate.TranslateLanguage;
+import com.google.mlkit.nl.translate.Translation;
+import com.google.mlkit.nl.translate.Translator;
+import com.google.mlkit.nl.translate.TranslatorOptions;
 
 public class TranslateActivity extends AppCompatActivity {
     Spinner textResourceID;
@@ -47,6 +58,36 @@ public class TranslateActivity extends AppCompatActivity {
         textResultID.getBackground().setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
         textResultID.setAdapter(adapter);
 
+        String langSourceID = textResourceID.getSelectedItem().toString();
+        String langResultID = textResultID.getSelectedItem().toString();
+
+        textResourceID.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String lang = parent.getItemAtPosition(position).toString();
+                textResourceID.setOnItemSelectedListener(this);
+                translateText(textResourceID.getSelectedItem().toString(), textResultID.getSelectedItem().toString(), textResource.getText().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        textResultID.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String lang = parent.getItemAtPosition(position).toString();
+                textResultID.setOnItemSelectedListener(this);
+                translateText(textResourceID.getSelectedItem().toString(), textResultID.getSelectedItem().toString(), textResource.getText().toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         textResource.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -56,7 +97,7 @@ public class TranslateActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if(s.length() != 0){
-                    textResult.setText(textResource.getText());
+                    translateText(textResourceID.getSelectedItem().toString(), textResultID.getSelectedItem().toString(), textResource.getText().toString());
                 }
                 else if(s.length() == 0){
                     textResult.setText("");
@@ -70,5 +111,68 @@ public class TranslateActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void translateText(String source, String result, String text) {
+        String sourceLang = checkLang(source);
+        String resultLang = checkLang(result);
+        TranslatorOptions options =
+                new TranslatorOptions.Builder()
+                        .setSourceLanguage(sourceLang)
+                        .setTargetLanguage(resultLang)
+                        .build();
+        final Translator languageTranslator =
+                Translation.getClient(options);
+        DownloadConditions conditions = new DownloadConditions.Builder()
+                .requireWifi()
+                .build();
+        languageTranslator.translate(text)
+                .addOnSuccessListener(
+                        new OnSuccessListener<String>() {
+                            @Override
+                            public void onSuccess(@NonNull String translatedText) {
+                                textResult.setText(translatedText);
+                            }
+                        })
+                .addOnFailureListener(
+                        new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                            }
+                        });
+    }
+
+    private String checkLang(String id) {
+        String result = "";
+        switch(id){
+            case "German":
+                result = TranslateLanguage.GERMAN;
+                break;
+            case "English":
+                result = TranslateLanguage.ENGLISH;
+                break;
+            case "Spain":
+                result = TranslateLanguage.SPANISH;
+                break;
+            case "Indonesia":
+                result = TranslateLanguage.INDONESIAN;
+                break;
+            case "Portuguese":
+                result = TranslateLanguage.PORTUGUESE;
+                break;
+            case "Tagalog":
+                result = TranslateLanguage.TAGALOG;
+                break;
+        }
+        return result;
+    }
+
+    public void changePosition(View view) {
+        int sourceID = textResourceID.getSelectedItemPosition();
+        int resultID = textResultID.getSelectedItemPosition();
+        textResourceID.setSelection(resultID);
+        textResultID.setSelection(sourceID);
+        textResource.setText(textResult.getText().toString());
+        translateText(textResourceID.getSelectedItem().toString(), textResultID.getSelectedItem().toString(), textResult.getText().toString());
     }
 }
