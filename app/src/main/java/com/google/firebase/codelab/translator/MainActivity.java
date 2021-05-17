@@ -86,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 Bitmap bitmap = cameraKitImage.getBitmap();
                 bitmap = Bitmap.createScaledBitmap(bitmap, cameraView.getWidth(), cameraView.getHeight(), false);
                 cameraView.stop();
-
                 runTextRecognition(bitmap);
             }
 
@@ -104,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     private void runTextRecognition(Bitmap bitmap) {
         InputImage image = InputImage.fromBitmap(bitmap, 0);
         TextRecognizer recognizer = TextRecognition.getClient();

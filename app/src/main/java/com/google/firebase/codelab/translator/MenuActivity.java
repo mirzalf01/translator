@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
@@ -17,6 +19,10 @@ import android.widget.Button;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.mlkit.common.model.DownloadConditions;
+import com.google.mlkit.common.model.RemoteModelManager;
+import com.google.mlkit.nl.translate.TranslateLanguage;
+import com.google.mlkit.nl.translate.TranslateRemoteModel;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -33,6 +39,7 @@ public class MenuActivity extends AppCompatActivity {
     InputImage image;
     String message;
     AlertDialog waitingDialog;
+    String[] model = {TranslateLanguage.GERMAN, TranslateLanguage.ENGLISH, TranslateLanguage.INDONESIAN, TranslateLanguage.SPANISH, TranslateLanguage.PORTUGUESE, TranslateLanguage.TAGALOG};
     public static final String EXTRA_MESSAGE = "com.google.firebase.codelab.translator.extra.MESSAGE";
     public static Context context;
 
@@ -47,8 +54,50 @@ public class MenuActivity extends AppCompatActivity {
         }
         waitingDialog = new SpotsDialog.Builder()
                 .setContext(this)
-                .setMessage("Please waiting . . .")
+                .setMessage("Downloading model . . .")
                 .setCancelable(false).build();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if(!prefs.getBoolean("firstTime", false)) {
+            // run your one time code
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean("firstTime", true);
+            editor.commit();
+            downloadModel(0);
+        }
+
+    }
+
+    private void downloadModel(int index) {
+        RemoteModelManager modelManager = RemoteModelManager.getInstance();
+        if (index < 6){
+            waitingDialog.show();
+            TranslateRemoteModel langModel =
+                    new TranslateRemoteModel.Builder(model[index]).build();
+            DownloadConditions conditions = new DownloadConditions.Builder()
+                    .requireWifi()
+                    .build();
+            modelManager.download(langModel, conditions)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void v) {
+                            if (waitingDialog.isShowing()){
+                                waitingDialog.dismiss();
+                            }
+                            downloadModel(index+1);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Error.
+                        }
+                    });
+        }
+        else{
+            if (waitingDialog.isShowing()){
+                waitingDialog.dismiss();
+            }
+        }
 
     }
     public void launcScan(View view) {
